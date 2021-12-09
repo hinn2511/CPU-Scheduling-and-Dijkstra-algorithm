@@ -6,10 +6,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import ltm.client.Client;
+import ltm.client.Connection;
+import ltm.client.gui.cpuScheduling.CpuShedulingPanel;
+import ltm.client.gui.pathFinder.FindShortestPathPanel;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
@@ -18,37 +23,24 @@ import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
 
-public class main extends JFrame {
+public class MainInterface extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private findShortestPathPanel findShortestPathPane;
-	private cpuShedulingPanel cpuShedulingPanel;
+	private FindShortestPathPanel findShortestPathPane;
+	private CpuShedulingPanel cpuShedulingPanel;
 
 	/**
-	 * Launch the main.
+	 * Launch the MainInterface.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					main frame = new main();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
 
 	/**
 	 * Create the frame.
 	 */
-	public main() {
+	public MainInterface() {
 		super("Find shortest path and CPU scheduling");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1190, 767);
@@ -62,8 +54,8 @@ public class main extends JFrame {
 		contentPane.add(layeredPane);
 		
 		
-		findShortestPathPane = new findShortestPathPanel();
-		cpuShedulingPanel = new cpuShedulingPanel();
+		findShortestPathPane = new FindShortestPathPanel();
+		cpuShedulingPanel = new CpuShedulingPanel();
 		
 		findShortestPathPane.setBounds(0, 0, 865, 720);
 		cpuShedulingPanel.setBounds(0, 0, 865, 720);
@@ -106,12 +98,28 @@ public class main extends JFrame {
 		btnCs.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(btnCs);
 		
+		JButton btnExit = new JButton("EXIT");
+		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnExit.setBounds(10, 656, 292, 58);
+		panel.add(btnExit);
+		
 		btnCs.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
 				findShortestPathPane.setVisible(false);
 				cpuShedulingPanel.setVisible(true);
+			}
+			
+		});
+		
+		btnExit.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
+				dispose();
+				setVisible(false);
 			}
 			
 		});
