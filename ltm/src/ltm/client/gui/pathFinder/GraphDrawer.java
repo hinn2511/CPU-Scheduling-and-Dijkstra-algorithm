@@ -44,7 +44,7 @@ public class GraphDrawer extends JPanel {
 		this.mxGraph = mxGraph;
 	}
 	
-	public GraphDrawer(int totalPos, int startPos, int endPos, String resultGraph, String shortestPath) {
+	public GraphDrawer(int totalPos, String resultGraph, String shortestPath) {
 		mxGraph = new mxGraph();
 		Object parent = mxGraph.getDefaultParent();
 
@@ -85,7 +85,7 @@ public class GraphDrawer extends JPanel {
 			for (int i = 0; i < totalPos; i++) {
 				for (int j = 0; j < totalPos; j++) {
 					String weight = st.nextToken();
-					if (!weight.equals("0") && !weight.equals("i")) {
+					if (!weight.equals("0")) {
 						if(shortestPathList.indexOf(i) >-1 && shortestPathList.indexOf(j) > -1)
 							mxGraph.insertEdge(parent, null, weight, placeList.get(i), placeList.get(j), "strokeColor=red");
 						else

@@ -79,20 +79,22 @@ public class Worker implements Runnable {
 						CalculatePath calculatePath = new CalculatePath(Integer.valueOf(st.nextToken()),
 								Integer.valueOf(st.nextToken()) - 1, Integer.valueOf(st.nextToken()) - 1, st.nextToken());
 						if (calculatePath.getCost() != Double.MAX_VALUE) {
-							String result = "success-" + calculatePath.getPath() 
-											+ "-" + String.valueOf((int)calculatePath.getCost())
-											+ "-" + calculatePath.getResutlGraph();
-							sendString(result);
-							System.out.println(calculatePath.getResutlGraph());
+							sendString("success");
+							sendString(String.valueOf(calculatePath.getTotalPos()));
+							sendString(String.valueOf(calculatePath.getStartPos()));
+							sendString(String.valueOf(calculatePath.getEndPos()));
+							sendString(calculatePath.getPath());
+							sendString(String.valueOf((int)calculatePath.getCost()));
+							sendString(calculatePath.getResutlGraph());
 						} else {
-							String result = "failed-Can not find shortest path";
-							sendString(result);
+							sendString("failed");
+							sendString("Can not find shortest path");
 						}
 					}
 					if (request.equals("cpuScheduling")) {
 
 					}
-					out.flush();
+					//out.flush();
 				}
 
 			}
