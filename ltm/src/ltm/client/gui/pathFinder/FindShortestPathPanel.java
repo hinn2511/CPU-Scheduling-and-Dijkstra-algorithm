@@ -167,32 +167,31 @@ public class FindShortestPathPanel extends JPanel {
 					while (true) {
 							String result = client.receiveString();
 							if (result != null) {
-								StringTokenizer resultTokenizer = new StringTokenizer(result, "-");
-							
-								if (resultTokenizer.nextToken().equals("failed")) {
-									alert(resultTokenizer.nextToken());
+								if(result.equals("failed")) {
+									alert(client.receiveString());
 									break;
-								} 
-								else 
-								{
-									StringTokenizer pathTokenizer = new StringTokenizer(path, "-");
+								}
+								else {								
+									int totalPos = Integer.valueOf(client.receiveString());
+									String startPos = client.receiveString();
+									String	endPos = client.receiveString();
+									String shortestPathResult = client.receiveString();
+									String cost = client.receiveString();
+									String resultGraph = client.receiveString();
 									
-									int totalPos = Integer.valueOf(pathTokenizer.nextToken());
-									int	startPos = Integer.valueOf(pathTokenizer.nextToken());
-									int	endPos = Integer.valueOf(pathTokenizer.nextToken());
-									String shortestPathResult = resultTokenizer.nextToken();
-									String cost = resultTokenizer.nextToken();
-									String resultGraph = resultTokenizer.nextToken();
-									gDrawer = new GraphDrawer(totalPos, startPos, endPos, resultGraph, shortestPathResult);
+									gDrawer = new GraphDrawer(totalPos, resultGraph, shortestPathResult);
 									gDrawer.setBounds(0, 0 , 500, 500);
 									panel.revalidate();
 									panel.repaint();
 									panel.add(gDrawer);
+									
 									txtCost.setText(String.valueOf(cost));
-									txtStart.setText(String.valueOf(startPos));
-									txtEnd.setText(String.valueOf(endPos));
+									txtStart.setText(startPos);
+									txtEnd.setText(endPos);
 									txtPath.setText(shortestPathResult.replace(" ", " -> "));
+									
 									btnExport.setEnabled(true);
+									
 									break;
 								}
 								

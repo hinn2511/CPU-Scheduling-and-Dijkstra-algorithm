@@ -38,7 +38,18 @@ public class CalculatePath {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
+	public int getTotalPos() {
+		return totalPos;
+	}
+
+	public int getStartPos() {
+		return startPos;
+	}
+
+	public int getEndPos() {
+		return endPos;
+	}
 
 	public CalculatePath(int totalPos, int startPos, int endPos, String graph) {
 		super();
@@ -75,13 +86,14 @@ public class CalculatePath {
 		
 		for (int i = 0; i < resutlGraphArray.length; ++i) {
 			for (int j = 0; j < resutlGraphArray.length; ++j) {
-				if(resutlGraphArray[j][i].equals("0")) {
+				if(resutlGraphArray[j][i].equals("0") && !graphArray[i][j].equals("i")) {
 					resutlGraphArray[i][j] = graphArray[i][j];
 				}
-				//resutlGraph += resutlGraphArray[i][j] + " ";
 				setResutlGraph(getResutlGraph() + resutlGraphArray[i][j] + " ");
 			}
 		}
+		
+		
 		
 
 		for (int i = 0; i < graphArray.length; ++i) {
