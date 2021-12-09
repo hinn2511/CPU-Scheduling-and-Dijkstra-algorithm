@@ -1,14 +1,14 @@
-package ltm.client.gui;
+package ltm.client.gui.cpuScheduling;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
-public class cpuShedulingPanel extends JPanel {
+public class CpuShedulingPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	public cpuShedulingPanel() {
+	public CpuShedulingPanel() {
 		
 		JLabel lblNewLabel = new JLabel("CPU sheduling");
 		add(lblNewLabel);
