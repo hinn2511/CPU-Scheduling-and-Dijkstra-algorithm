@@ -86,9 +86,9 @@ public class CalculatePath {
 		
 		for (int i = 0; i < resutlGraphArray.length; ++i) {
 			for (int j = 0; j < resutlGraphArray.length; ++j) {
-				if(resutlGraphArray[j][i].equals("0") && !graphArray[i][j].equals("i")) {
+				//if(resutlGraphArray[j][i].equals("0") && !graphArray[i][j].equals("i")) {
 					resutlGraphArray[i][j] = graphArray[i][j];
-				}
+				//}
 				setResutlGraph(getResutlGraph() + resutlGraphArray[i][j] + " ");
 			}
 		}

@@ -30,7 +30,7 @@ public class Server {
 			}
 		} 
 		catch (IOException e) {
-			// TODO: handle exception
+			System.out.println(e);
 		}
 		finally {
 			if(server != null)

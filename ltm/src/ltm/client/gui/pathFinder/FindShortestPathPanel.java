@@ -13,6 +13,7 @@ import ltm.client.FileHandler;
 import ltm.client.Client;
 import ltm.client.Utility;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,6 +21,9 @@ import java.util.StringTokenizer;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.border.MatteBorder;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import java.awt.SystemColor;
 
 public class FindShortestPathPanel extends JPanel {
 	/**
@@ -28,7 +32,6 @@ public class FindShortestPathPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField txtFilePath;
 	private JTextField txtCost;
-	private JTextField txtPath;
 	private GraphDrawer gDrawer;
 	private Utility u = new Utility();
 	private JTextField txtEnd;
@@ -43,18 +46,19 @@ public class FindShortestPathPanel extends JPanel {
 
 		JLabel lblNewLabel = new JLabel("Choose text file");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(26, 87, 133, 27);
+		lblNewLabel.setBounds(26, 56, 118, 27);
 		add(lblNewLabel);
 
 		txtFilePath = new JTextField();
+		txtFilePath.setBackground(SystemColor.text);
 		txtFilePath.setEditable(false);
-		txtFilePath.setBounds(26, 124, 530, 39);
+		txtFilePath.setBounds(26, 93, 477, 39);
 		add(txtFilePath);
 		txtFilePath.setColumns(10);
 
 		JButton btnPickFile = new JButton("Choose");
 		btnPickFile.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPickFile.setBounds(589, 121, 233, 41);
+		btnPickFile.setBounds(370, 56, 133, 27);
 		add(btnPickFile);
 
 		final JButton btnFind = new JButton("Find shortest path");
@@ -63,7 +67,7 @@ public class FindShortestPathPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnFind.setBounds(589, 210, 233, 48);
+		btnFind.setBounds(26, 164, 477, 68);
 		add(btnFind);
 		btnFind.setEnabled(false);
 
@@ -73,40 +77,35 @@ public class FindShortestPathPanel extends JPanel {
 			}
 		});
 		btnExport.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExport.setBounds(589, 279, 233, 48);
+		btnExport.setBounds(26, 607, 477, 48);
 		add(btnExport);
 		btnExport.setEnabled(false);
 
 		JLabel lblResult = new JLabel("Result");
 		lblResult.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblResult.setBounds(26, 173, 133, 27);
+		lblResult.setBounds(526, 56, 133, 27);
 		add(lblResult);
 
 		JLabel lblNewLabel_1 = new JLabel("Cost");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(589, 619, 45, 39);
+		lblNewLabel_1.setBounds(26, 496, 45, 39);
 		add(lblNewLabel_1);
 
 		txtCost = new JTextField();
+		txtCost.setBackground(SystemColor.text);
 		txtCost.setEditable(false);
 		txtCost.setColumns(10);
-		txtCost.setBounds(589, 653, 233, 39);
+		txtCost.setBounds(26, 530, 477, 39);
 		add(txtCost);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Path\r\n");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1.setBounds(589, 533, 73, 39);
+		lblNewLabel_1_1.setBounds(26, 354, 118, 39);
 		add(lblNewLabel_1_1);
-
-		txtPath = new JTextField();
-		txtPath.setEditable(false);
-		txtPath.setColumns(10);
-		txtPath.setBounds(589, 570, 233, 39);
-		add(txtPath);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		scrollPane.setBounds(26, 210, 530, 482);
+		scrollPane.setBounds(526, 93, 796, 562);
 		add(scrollPane);
 
 		JPanel panel = new JPanel();
@@ -114,30 +113,41 @@ public class FindShortestPathPanel extends JPanel {
 
 		JLabel lblNewLabel_2 = new JLabel("FIND SHORTEST PATH");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		lblNewLabel_2.setBounds(26, 27, 257, 38);
+		lblNewLabel_2.setBounds(26, 0, 257, 38);
 		add(lblNewLabel_2);
 
 		txtEnd = new JTextField();
+		txtEnd.setBackground(SystemColor.text);
 		txtEnd.setEditable(false);
 		txtEnd.setColumns(10);
-		txtEnd.setBounds(589, 484, 233, 39);
+		txtEnd.setBounds(273, 290, 230, 39);
 		add(txtEnd);
 
 		txtStart = new JTextField();
+		txtStart.setBackground(SystemColor.text);
 		txtStart.setEditable(false);
 		txtStart.setColumns(10);
-		txtStart.setBounds(589, 399, 233, 39);
+		txtStart.setBounds(26, 290, 224, 39);
 		add(txtStart);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("End\r\n");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1_1.setBounds(589, 446, 73, 39);
+		lblNewLabel_1_1_1.setBounds(273, 255, 73, 39);
 		add(lblNewLabel_1_1_1);
 
 		JLabel lblNewLabel_1_1_2 = new JLabel("Start");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1_2.setBounds(589, 364, 73, 39);
+		lblNewLabel_1_1_2.setBounds(26, 255, 73, 39);
 		add(lblNewLabel_1_1_2);
+		
+		JTextArea txtPath = new JTextArea();
+		txtPath.setBackground(SystemColor.text);
+		txtPath.setEditable(false);
+		txtPath.setBounds(26, 390, 477, 96);
+		txtPath.setBorder(BorderFactory.createCompoundBorder(
+				txtPath.getBorder(), 
+		        BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+		add(txtPath);
 
 		btnPickFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -167,28 +177,34 @@ public class FindShortestPathPanel extends JPanel {
 					while (true) {
 							String result = client.receiveString();
 							if (result != null) {
+								
+								if(gDrawer != null) {
+									panel.remove(gDrawer);
+								}
+								
 								if(result.equals("failed")) {
 									alert(client.receiveString());
 									break;
 								}
 								else {								
-									int totalPos = Integer.valueOf(client.receiveString());
-									String startPos = client.receiveString();
-									String	endPos = client.receiveString();
-									String shortestPathResult = client.receiveString();
+									String placeList = client.receiveString();
+									String startPlace = client.receiveString();
+									String endPlace = client.receiveString();
+									String shortestPath = client.receiveString();
 									String cost = client.receiveString();
-									String resultGraph = client.receiveString();
+									String pathGraph = client.receiveString();
+									String shortestPathGraph = client.receiveString();
 									
-									gDrawer = new GraphDrawer(totalPos, resultGraph, shortestPathResult);
+									gDrawer = new GraphDrawer(placeList, startPlace, endPlace, pathGraph, shortestPathGraph);
 									gDrawer.setBounds(0, 0 , 500, 500);
 									panel.revalidate();
 									panel.repaint();
 									panel.add(gDrawer);
 									
-									txtCost.setText(String.valueOf(cost));
-									txtStart.setText(startPos);
-									txtEnd.setText(endPos);
-									txtPath.setText(shortestPathResult.replace(" ", " -> "));
+									txtCost.setText(cost);
+									txtStart.setText(startPlace);
+									txtEnd.setText(endPlace);
+									txtPath.setText(shortestPath);
 									
 									btnExport.setEnabled(true);
 									
