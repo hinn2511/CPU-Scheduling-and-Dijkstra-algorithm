@@ -43,22 +43,22 @@ public class MainInterface extends JFrame {
 	public MainInterface() {
 		super("Find shortest path and CPU scheduling");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1190, 767);
+		setBounds(100, 100, 1371, 817);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(311, 0, 865, 720);
+		layeredPane.setBounds(10, 102, 1337, 679);
 		contentPane.add(layeredPane);
 		
 		
 		findShortestPathPane = new FindShortestPathPanel();
 		cpuShedulingPanel = new CpuShedulingPanel();
 		
-		findShortestPathPane.setBounds(0, 0, 865, 720);
-		cpuShedulingPanel.setBounds(0, 0, 865, 720);
+		findShortestPathPane.setBounds(0, 0, 1337, 674);
+		cpuShedulingPanel.setBounds(0, 0, 1337, 674);
 		
 		findShortestPathPane.setOpaque(false);
 		cpuShedulingPanel.setOpaque(false);
@@ -70,38 +70,46 @@ public class MainInterface extends JFrame {
 		cpuShedulingPanel.setVisible(false);
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(176, 196, 222));
-		panel.setBounds(0, 0, 312, 767);
+		panel.setBackground(UIManager.getColor("Button.background"));
+		panel.setBounds(0, 0, 1347, 92);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JButton btnFsp = new JButton("FIND SHORTEST PATH\r\n");
 		btnFsp.setIcon(new ImageIcon("src/ltm/assets/magnifier.png"));
-		btnFsp.setBounds(10, 16, 292, 58);
+		btnFsp.setBounds(36, 22, 292, 58);
 		panel.add(btnFsp);
 		btnFsp.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
-		btnFsp.addActionListener(new ActionListener()
-	    {
-	        public void actionPerformed(ActionEvent e)
-	        {
-	        	findShortestPathPane.setVisible(true);
-	        	cpuShedulingPanel.setVisible(false);
-	        }
-
-	    });
-		
 		
 		JButton btnCs = new JButton("CPU SCHEDULING");
-		btnCs.setIcon(new ImageIcon("src/ltm/assets/cpu.png"));
-		btnCs.setBounds(10, 84, 292, 58);
-		btnCs.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnCs.setBounds(338, 22, 292, 58);
 		panel.add(btnCs);
+		btnCs.setIcon(new ImageIcon("src/ltm/assets/cpu.png"));
+		btnCs.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JButton btnExit = new JButton("EXIT");
-		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExit.setBounds(10, 656, 292, 58);
+		btnExit.setBounds(1039, 22, 292, 58);
 		panel.add(btnExit);
+		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		btnExit.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				Connection client = Client.getConnection();
+				try {
+					client.sendString("exit");
+					System.exit(0);
+					dispose();
+					setVisible(false);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+			
+		});
 		
 		btnCs.addActionListener(new ActionListener()
 		{
@@ -113,15 +121,14 @@ public class MainInterface extends JFrame {
 			
 		});
 		
-		btnExit.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				System.exit(0);
-				dispose();
-				setVisible(false);
-			}
-			
-		});
+		btnFsp.addActionListener(new ActionListener()
+	    {
+	        public void actionPerformed(ActionEvent e)
+	        {
+	        	findShortestPathPane.setVisible(true);
+	        	cpuShedulingPanel.setVisible(false);
+	        }
+
+	    });
 	}
 }

@@ -42,7 +42,7 @@ public class FileHandler {
 		
 		try {
 			Scanner read = new Scanner(new File(path));
-			result = read.nextLine() + "-" + read.nextLine() + "-" + read.nextLine() + "-";
+			result = read.nextLine() + "|" + read.nextLine() + "|" + read.nextLine() + "|" + read.nextLine() + "|";
 			boolean first = true;
 			while (read.hasNextLine()) {
 				if(first) {
@@ -50,7 +50,7 @@ public class FileHandler {
 					first = false;
 				}
 				else
-					result = result + " " + read.nextLine();
+					result = result + "," + read.nextLine();
 			}
 			read.close();
 		} catch (FileNotFoundException ex) {

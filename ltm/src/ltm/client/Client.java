@@ -43,14 +43,14 @@ public class Client {
 					
 					// Client cho` de nhan phan hoi tu server
 					while(true) {
-						String aString = client.receiveString();
-						if(aString.equals("ok")) {
+						String ok = client.receiveString();
+						if(ok.equals("ok")) {
 							break;
 						}
 					};
 					
 				} catch (Exception e) {
-					e.printStackTrace();
+					System.out.println(e);
 				}
 			}
 		});

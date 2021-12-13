@@ -1,0 +1,21 @@
+Places:Nha Trang,Vũng Tàu,Đà Lạt,TPHCM,Cà Mau,Đà Nẵng,Hà Nội,Nghệ An
+Directed:true
+From:TPHCM
+To:Hà Nội
+TPHCM->Vũng Tàu:52
+TPHCM->Đà Lạt:67
+TPHCM->Đà Nẵng:88
+TPHCM->Nha Trang:14
+Vũng Tàu->Đà Nẵng:89
+Vũng Tàu->Đà Lạt:57
+Vũng Tàu->TPHCM:31
+Vũng Tàu->Nha Trang:8
+Nha Trang->Đà Nẵng:69
+Nha Trang->Đà Lạt:23
+Nha Trang->TPHCM:11
+Đà Lạt->Hà Nội:45
+Đà Lạt->TPHCM:73
+Đà Lạt->Đà Nẵng:3
+Đà Nẵng->Nghệ An:10
+Đà Nẵng->Hà Nội:14
+Nghệ An->Hà Nội:35

@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import ltm.server.pathFinder.CalculatePath;
+import ltm.server.pathFinder.CalculatePath2;
 
 public class Worker implements Runnable {
 	String publicKeyString = "this is server public key";
@@ -75,17 +76,25 @@ public class Worker implements Runnable {
 						break;
 					if (request.equals("findPath")) {
 						String data = in.readLine();
-						StringTokenizer st = new StringTokenizer(data, "-");
-						CalculatePath calculatePath = new CalculatePath(Integer.valueOf(st.nextToken()),
-								Integer.valueOf(st.nextToken()) - 1, Integer.valueOf(st.nextToken()) - 1, st.nextToken());
-						if (calculatePath.getCost() != Double.MAX_VALUE) {
+						
+						StringTokenizer st = new StringTokenizer(data, "|");
+						String placeList = st.nextToken().replace("Places:", "");
+						boolean directed = Boolean.valueOf(st.nextToken().replace("Directed:", "")) ;
+						String from = st.nextToken().replace("From:", "");
+						String to = st.nextToken().replace("To:", "");
+						String distance = st.nextToken();
+	
+						CalculatePath2 calculatePath2 = new CalculatePath2(placeList, directed, from, to, distance);
+						if (calculatePath2.getCost() != Double.MAX_VALUE) {
 							sendString("success");
-							sendString(String.valueOf(calculatePath.getTotalPos()));
-							sendString(String.valueOf(calculatePath.getStartPos()));
-							sendString(String.valueOf(calculatePath.getEndPos()));
-							sendString(calculatePath.getPath());
-							sendString(String.valueOf((int)calculatePath.getCost()));
-							sendString(calculatePath.getResutlGraph());
+							
+							sendString(calculatePath2.getPlacelist());
+							sendString(calculatePath2.getStartPlace());
+							sendString(calculatePath2.getEndPlace());
+							sendString(calculatePath2.getShortestPath());
+							sendString(String.valueOf((int) calculatePath2.getCost()));
+							sendString(calculatePath2.getPathGraph());
+							sendString(calculatePath2.getShortestPathGraph());
 						} else {
 							sendString("failed");
 							sendString("Can not find shortest path");
