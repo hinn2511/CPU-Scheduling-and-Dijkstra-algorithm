@@ -15,10 +15,16 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
 import java.awt.Color;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
@@ -103,7 +109,7 @@ public class MainInterface extends JFrame {
 					System.exit(0);
 					dispose();
 					setVisible(false);
-				} catch (IOException e1) {
+				} catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
 					e1.printStackTrace();
 				}
 				

@@ -1,122 +1,185 @@
 package ltm.server.pathFinder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class CalculatePath {
+	private String placelist;
+	private String startPlace;
+	private String endPlace;
+	private String distance;
+	private String shortestPath;
+	private String pathGraph;
+	private String shortestPathGraph;
 	private double cost;
-	private String path;
-	private int totalPos;
-	private int startPos;
-	private int endPos;
-	private String graph;
-	private String resutlGraph;
-	
-	public String getResutlGraph() {
-		return resutlGraph;
+
+	public String getPathGraph() {
+		return pathGraph;
 	}
 
-	public void setResutlGraph(String resutlGraph) {
-		this.resutlGraph = resutlGraph;
+	public void setPathGraph(String pathGraph) {
+		this.pathGraph = pathGraph;
 	}
 
+	public String getPlacelist() {
+		return placelist;
+	}
+
+	public void setPlacelist(String placelist) {
+		this.placelist = placelist;
+	}
+
+	public String getStartPlace() {
+		return startPlace;
+	}
+
+	public void setStartPlace(String startPlace) {
+		this.startPlace = startPlace;
+	}
+
+	public String getEndPlace() {
+		return endPlace;
+	}
+
+	public void setEndPlace(String endPlace) {
+		this.endPlace = endPlace;
+	}
+
+	public String getDistance() {
+		return distance;
+	}
+
+	public void setDistance(String distance) {
+		this.distance = distance;
+	}
+
+	public String getShortestPath() {
+		return shortestPath;
+	}
+
+	public void setShortestPath(String shortestPath) {
+		this.shortestPath = shortestPath;
+	}
+
+	public String getShortestPathGraph() {
+		return shortestPathGraph;
+	}
+
+	public void setShortestPathGraph(String shortestPathGraph) {
+		this.shortestPathGraph = shortestPathGraph;
+	}
 
 	public double getCost() {
 		return cost;
 	}
-	
+
 	public void setCost(double cost) {
 		this.cost = cost;
 	}
 
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public int getTotalPos() {
-		return totalPos;
-	}
-
-	public int getStartPos() {
-		return startPos;
-	}
-
-	public int getEndPos() {
-		return endPos;
-	}
-
-	public CalculatePath(int totalPos, int startPos, int endPos, String graph) {
+	public CalculatePath(String placelist, String startPlace, String endPlace, String distance) {
 		super();
-		this.totalPos = totalPos;
-		this.startPos = startPos;
-		this.endPos = endPos;
-		this.graph = graph;
+		this.placelist = placelist;
+		this.startPlace = startPlace;
+		this.endPlace = endPlace;
+		this.distance = distance;
 		Calculate();
 	}
 
 	public void Calculate() {
-		List<Vert> vertList = new ArrayList<Vert>();
-		for (int i = 0; i < totalPos; i++) {
-			vertList.add(new Vert(String.valueOf(i)));
+		StringTokenizer st = null;
+
+		// Tao danh sach dia diem
+		List<String> places = new ArrayList();
+
+		// Them tung dia diem vao danh sach
+		st = new StringTokenizer(getPlacelist(), ",");
+		while (st.hasMoreTokens()) {
+			places.add(st.nextToken());
 		}
 
-		StringTokenizer st = new StringTokenizer(graph, " ");
-		String[][] graphArray = new String[totalPos][totalPos];
-		String[][] resutlGraphArray = new String[totalPos][totalPos];
+		// Them cac dinh tuong ung voi tung` dia diem
+		List<Vert> vertList = new ArrayList<Vert>();
+		for (int i = 0; i < places.size(); i++) {
+			vertList.add(new Vert(places.get(i)));
+		}
 
+		// Tao mang 2 chieu chua khoanh cach giua 2 diem
+		//String temp = getDistance().replace("->", "|").replace(":", "|").replace(",", "|");
+		st = new StringTokenizer(getDistance(), "|");
+
+		// Khoi tao mang co do dai = so luong dia diem
+		String[][] graphArray = new String[places.size()][places.size()];
+
+		// Cho tat ca bang 0
 		for (int i = 0; i < graphArray.length; ++i) {
 			for (int j = 0; j < graphArray.length; ++j) {
-				graphArray[i][j] = st.nextToken();
+				graphArray[i][j] = "0";
 			}
 		}
-		
-		for (int i = 0; i < resutlGraphArray.length; ++i) {
-			for (int j = 0; j < resutlGraphArray.length; ++j) {
-				resutlGraphArray[i][j] = "0";
-			}
-		}
-		
-		setResutlGraph("");
-		
-		for (int i = 0; i < resutlGraphArray.length; ++i) {
-			for (int j = 0; j < resutlGraphArray.length; ++j) {
-				//if(resutlGraphArray[j][i].equals("0") && !graphArray[i][j].equals("i")) {
-					resutlGraphArray[i][j] = graphArray[i][j];
-				//}
-				setResutlGraph(getResutlGraph() + resutlGraphArray[i][j] + " ");
-			}
-		}
-		
-		
-		
 
+		// Neu co duong di, thay the "0" bang khoang cach giua 2 dinh
+		while (st.hasMoreTokens()) {
+			graphArray[places.indexOf(st.nextToken())][places.indexOf(st.nextToken())] = st.nextToken();
+		}
+		
+		// Them cac canh giua cac dinh neu co duong di ( do dai giua 2 dinh != "0")
 		for (int i = 0; i < graphArray.length; ++i) {
 			for (int j = 0; j < graphArray[i].length; ++j) {
-				if (!graphArray[i][j].equals("0") && !graphArray[i][j].equals("i"))
-					vertList.get(Integer.valueOf(i)).addNeighbour(new Edge(Integer.valueOf(graphArray[i][j]),
-							vertList.get(Integer.valueOf(i)), vertList.get(Integer.valueOf(j))));
+				if (!graphArray[i][j].equals("0"))
+					vertList.get(i).addNeighbour(
+							new Edge(Integer.valueOf(graphArray[i][j]), vertList.get(i), vertList.get(j)));
 			}
 		}
 
+		// Lop tim duong di ngan nhat
 		PathFinder shortestPath = new PathFinder();
-		shortestPath.ShortestP(vertList.get(startPos));
+		
+		// Tim duong di ngan nhat tu vi tri startPlace
+		shortestPath.ShortestP(vertList.get(places.indexOf(getStartPlace())));
 
-		setCost(vertList.get(endPos).getDist());
+		// Tinh chi phi duong di ngan nhat tu startPlace den endPlace
+		setCost(vertList.get(places.indexOf(getEndPlace())).getDist());
 
-		List<Vert> shortestPathList = shortestPath.getShortestP(vertList.get(endPos));
+		// Danh sach ca dinh trong duong di ngan nhat
+		List<Vert> shortestPathList = shortestPath.getShortestP(vertList.get(places.indexOf(getEndPlace())));
+
+		// Tra ve chuoi chua duong di ngan nhat
 		String shortestPathString = "";
-		for (Vert vert : shortestPathList) {
-			int vertName = Integer.valueOf(vert.getName()) + 1;
-			shortestPathString += vertName + " ";
-		}
-		shortestPathString = shortestPathString.substring(0, shortestPathString.length() - 1);
-		setPath(shortestPathString);
-	}
 
+		for (Vert vert : shortestPathList) {
+			shortestPathString += vert.getName() + " -> ";
+		}
+		shortestPathString = shortestPathString.substring(0, shortestPathString.length() - 4);
+		setShortestPath(shortestPathString);
+
+		// Tra ve mang do dai duong di giua cac dinh
+		setPathGraph("");
+		// Tra ve mang duong di ngan nhat ( "x" neu ton tai trong duong di ngan nhat, nguoc lai la "0")
+		setShortestPathGraph("");
+
+		// Xu ly chuoi duong di ngan nhat
+		for (int i = 0; i < graphArray.length; ++i) {
+			for (int j = 0; j < graphArray.length; ++j) {
+				setPathGraph(getPathGraph() + " " + graphArray[i][j]);
+				if (shortestPathList.indexOf(vertList.get(i)) > -1 && shortestPathList.indexOf(vertList.get(j)) > -1) {
+					if (i < j && shortestPathList.indexOf(vertList.get(j))
+							- shortestPathList.indexOf(vertList.get(i)) == 1)
+						setShortestPathGraph(getShortestPathGraph() + " x");
+					else {
+						if (i > j && shortestPathList.indexOf(vertList.get(j))
+								- shortestPathList.indexOf(vertList.get(i)) == 1)
+							setShortestPathGraph(getShortestPathGraph() + " x");
+						else
+							setShortestPathGraph(getShortestPathGraph() + " 0");
+					}
+				} 
+				else
+					setShortestPathGraph(getShortestPathGraph() + " 0");
+			}
+		}
+	}
 }

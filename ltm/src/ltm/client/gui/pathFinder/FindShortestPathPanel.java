@@ -9,14 +9,18 @@ import java.awt.Font;
 import javax.swing.JTextField;
 
 import ltm.client.Connection;
-import ltm.client.FileHandler;
 import ltm.client.Client;
 import ltm.client.Utility;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.StringTokenizer;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -151,15 +155,15 @@ public class FindShortestPathPanel extends JPanel {
 
 		btnPickFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FileHandler filePicker = new FileHandler();
+				//FileHandler filePicker = new FileHandler();
 				try {
-					filePicker.pickingFile();
+					u.pickingFile();
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
-				if (filePicker.getPath() != null) {
-					filePath = filePicker.getPath();
-					txtFilePath.setText(filePicker.getPath());
+				if (u.getPath() != null) {
+					filePath = u.getPath();
+					txtFilePath.setText(u.getPath());
 					btnFind.setEnabled(true);
 				}
 			}
@@ -169,8 +173,7 @@ public class FindShortestPathPanel extends JPanel {
 		btnFind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Connection client = Client.getConnection();
-				FileHandler fileHandler = new FileHandler();
-				String path = fileHandler.readShortesPathFile(filePath);
+				String path = u.readShortesPathFile(filePath);
 				try {
 					client.sendString("findPath");
 					client.sendString(path);
@@ -182,7 +185,7 @@ public class FindShortestPathPanel extends JPanel {
 									panel.remove(gDrawer);
 								}
 								
-								if(result.equals("failed")) {
+								if(result.equals("failed") || result.equals("error")) {
 									alert(client.receiveString());
 									break;
 								}
@@ -214,8 +217,8 @@ public class FindShortestPathPanel extends JPanel {
 							}
 						
 					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
+					alert("Can not send data to server.");
 				}
 				
 			}
