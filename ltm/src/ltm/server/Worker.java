@@ -9,11 +9,17 @@ import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.*;
 
+import ltm.server.cpuScheduling.*;
 import ltm.server.pathFinder.CalculatePath;
 
 public class Worker implements Runnable {
@@ -102,6 +108,79 @@ public class Worker implements Runnable {
 
 					}
 					if (request.equals("cpuScheduling")) {
+						System.out.println(" CPU Start ");
+//						in.readLine();
+						String Option = receive();
+
+						CPUScheduler scheduler;
+
+						String result_Client = receive();
+
+
+						StringTokenizer st=new StringTokenizer(result_Client,",");
+						int dem=0;
+						int dongdung=0;
+						int st_Count = st.countTokens();
+						while (st.hasMoreTokens()) {
+							String temp = st.nextToken();
+							StringTokenizer st_temp = new StringTokenizer(temp, "-");
+							st_temp.nextToken();
+							dem = 0;
+							while (st_temp.hasMoreTokens()) {
+								String temp1 = st_temp.nextToken();
+								if (CheckNum(temp1))
+									dem++;
+							}
+							if (dem != 2)
+								break;
+							dongdung++;
+						}
+
+						if(dongdung==st_Count) {
+							send("Success");
+							switch (Option) {
+								case "FCFS":
+									scheduler = new FirstComeFirstServe();
+									StringTokenizer st1=new StringTokenizer(result_Client,",");
+									String temp="";
+
+									while (st1.hasMoreTokens()){
+										temp=st1.nextToken();
+										System.out.println("hello "+temp);
+										StringTokenizer token=new StringTokenizer(temp,"-");
+										scheduler.add(new Row(	token.nextToken(),							// P1
+												Integer.parseInt( token.nextToken()), 		// AT(P1)
+												Integer.parseInt( token.nextToken())));		// BT(B1)
+									}
+									scheduler.process();
+									send(display(scheduler));
+									break;
+								case "SJF":
+									scheduler = new ShortestJobFirst();
+									break;
+								case "PSN":
+									scheduler = new PriorityNonPreemptive();
+									break;
+								case "RR":
+									String tq = JOptionPane.showInputDialog("Time Quantum");
+									if (tq == null) {
+										return;
+									}
+									scheduler = new RoundRobin();
+									scheduler.process();
+									display(scheduler);
+									scheduler.setTimeQuantum(Integer.parseInt(tq));
+									break;
+								default:
+									return;
+							}
+						}
+						else {
+							send("failed");
+							send("Data Incorectly ");
+						}
+
+
 
 					}
 				}
@@ -115,6 +194,55 @@ public class Worker implements Runnable {
 				| NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
 			System.out.println("Exception " + e);
 		}
+	}
+
+	public static boolean CheckNum(String so)
+	{
+		Pattern pattern = Pattern.compile("\\d*");
+		Matcher matcher = pattern.matcher(so);
+		if (matcher.matches())
+			return true;
+		else
+			return false;
+	}
+
+	public static String display(CPUScheduler object)
+	{
+		String result="";
+		System.out.println("Process\tAT\tBT\tWT\tTAT");
+
+		//Xuất mảng
+		for (Row row : object.getRows())
+		{
+			System.out.println(row.getProcessName() + "\t" + row.getArrivalTime() + "\t" + row.getBurstTime()
+					+ "\t" + row.getWaitingTime() + "\t" + row.getTurnaroundTime());
+		}
+
+		System.out.println();
+
+		for (int i = 0; i < object.getTimeline().size(); i++)
+		{
+			List<Event> timeline = object.getTimeline();
+			// Xuất thời gian và tiến trình
+			if(i==0)
+				result=timeline.get(i).getStartTime() + "-" + timeline.get(i).getProcessName();
+			else
+				result=result+ "-"+timeline.get(i).getStartTime() + "-" + timeline.get(i).getProcessName();
+
+			System.out.print(timeline.get(i).getStartTime() + "(" + timeline.get(i).getProcessName() + ")");
+
+			// Xuất thời gian cuối cùng
+			if (i == object.getTimeline().size() - 1)
+			{
+				result=result + "-"+timeline.get(i).getFinishTime();
+				System.out.print(timeline.get(i).getFinishTime());
+			}
+		}
+		result=result+"-"+object.getAverageWaitingTime()+"-"+object.getAverageTurnAroundTime();
+		System.out.println("say hello "+ result);
+		System.out.println("\n\nAverage WT: " + object.getAverageWaitingTime() + "\nAverage TAT: " + object.getAverageTurnAroundTime());
+
+		return result;
 	}
 
 }
