@@ -49,7 +49,7 @@ public class Connection {
 		};
 		
 		while(true) {
-			String se = receiveString();
+			String se = receive();
 			if(se.equals("Security enabled")) {
 				break;
 			}
@@ -57,13 +57,13 @@ public class Connection {
 		
 	}
 
-	public void sendString(String message) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+	public void send(String message) throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		out.write(security.AESEncrypt(message));
 		out.newLine();
 		out.flush();
 	}
 
-	public String receiveString() throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+	public String receive() throws IOException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 		String returnMessage = in.readLine();
 		String decryptedMessage = security.AESDecrypt(returnMessage);
 		return decryptedMessage;

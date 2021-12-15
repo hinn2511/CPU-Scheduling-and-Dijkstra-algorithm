@@ -107,7 +107,7 @@ public class Worker implements Runnable {
 				}
 
 			}
-			System.out.println("Closing connection");
+			System.out.println("Closing connection with" + socket.toString());
 			in.close();
 			out.close();
 			socket.close();

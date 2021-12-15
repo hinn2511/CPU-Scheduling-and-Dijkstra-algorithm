@@ -105,9 +105,10 @@ public class MainInterface extends JFrame {
 			{
 				Connection client = Client.getConnection();
 				try {
-					client.sendString("exit");
+					client.send("exit");
 					System.exit(0);
 					dispose();
+					client.closeSocket();
 					setVisible(false);
 				} catch (IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e1) {
 					e1.printStackTrace();
