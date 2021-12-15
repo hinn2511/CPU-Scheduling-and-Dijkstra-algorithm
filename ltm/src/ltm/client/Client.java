@@ -27,7 +27,6 @@ public class Client {
 				
 			}
 		});
-		client.closeSocket();
 	}
 
 }

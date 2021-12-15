@@ -175,10 +175,10 @@ public class FindShortestPathPanel extends JPanel {
 				Connection client = Client.getConnection();
 				String path = u.readShortesPathFile(filePath);
 				try {
-					client.sendString("findPath");
-					client.sendString(path);
+					client.send("findPath");
+					client.send(path);
 					while (true) {
-							String result = client.receiveString();
+							String result = client.receive();
 							if (result != null) {
 								
 								if(gDrawer != null) {
@@ -186,17 +186,17 @@ public class FindShortestPathPanel extends JPanel {
 								}
 								
 								if(result.equals("failed") || result.equals("error")) {
-									alert(client.receiveString());
+									alert(client.receive());
 									break;
 								}
 								else {								
-									String placeList = client.receiveString();
-									String startPlace = client.receiveString();
-									String endPlace = client.receiveString();
-									String shortestPath = client.receiveString();
-									String cost = client.receiveString();
-									String pathGraph = client.receiveString();
-									String shortestPathGraph = client.receiveString();
+									String placeList = client.receive();
+									String startPlace = client.receive();
+									String endPlace = client.receive();
+									String shortestPath = client.receive();
+									String cost = client.receive();
+									String pathGraph = client.receive();
+									String shortestPathGraph = client.receive();
 									
 									gDrawer = new GraphDrawer(placeList, startPlace, endPlace, pathGraph, shortestPathGraph);
 									gDrawer.setBounds(0, 0 , 500, 500);
