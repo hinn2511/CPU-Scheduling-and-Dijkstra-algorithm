@@ -3,28 +3,23 @@ package ltm.server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.StringTokenizer;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import ltm.server.pathFinder.CalculatePath;
-import ltm.server.pathFinder.CalculatePath2;
 
 public class Worker implements Runnable {
-	String publicKeyString = "this is server public key";
-	String privateKeyString = "this is server private key";
-	String privateSessionString = "";
+	Security security;
 	BufferedReader in = null;
 	BufferedWriter out = null;
-
 	private Socket socket;
 
 	public Worker(Socket socket) throws IOException {
@@ -33,15 +28,21 @@ public class Worker implements Runnable {
 		out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 	}
 
-	public void sendString(String message) throws IOException {
-		out.write(message);
+	public void send(String message) throws IOException, InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		String encryptedMessage = security.AESEncrypt(message);
+		out.write(encryptedMessage);
 		out.newLine();
 		out.flush();
 	}
 
-	public String receiveString() throws IOException {
-		String returnMessageString = in.readLine();
-		return returnMessageString;
+	public String receive() throws IOException, InvalidKeyException, NoSuchAlgorithmException,
+			NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+		String returnMessage = in.readLine();
+		if (returnMessage == null)
+			return null;
+		String decryptedMessage = security.AESDecrypt(returnMessage);
+		return decryptedMessage;
 	}
 
 	@Override
@@ -51,59 +52,58 @@ public class Worker implements Runnable {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-			// Server gui public key cho client dau tien
-			sendString(publicKeyString);
+			security = new Security();
+			security.generateRSAKey();
 
-			// Cho client gui sesson key
+			out.write(security.getPublicKey());
+			out.newLine();
+			out.flush();
+
 			while (true) {
-				String sessionKey = receiveString();
-
-				// Nhan duoc session key tu client
-				if (sessionKey != null) {
-					System.out.println("Session Key " + sessionKey);
-					//Sau khi nhan duoc session key tu server
-					//Server gui phan hoi cho client
-					privateSessionString = sessionKey;
-					sendString("ok");
+				String encryptedSessionKey = in.readLine();
+				if (encryptedSessionKey != null) {
+					String sessionKey = security.RSADecrypt(encryptedSessionKey);
+					security.setSecretKey(sessionKey);
+					send("Security enabled");
 					break;
 				}
 			}
-			
+
 			while (true) {
-				String request = in.readLine();
+				String request = receive();
 				if (request != null) {
 					if (request.equals("exit"))
 						break;
 					if (request.equals("findPath")) {
-						String data = in.readLine();
-						
-						StringTokenizer st = new StringTokenizer(data, "|");
-						String placeList = st.nextToken().replace("Places:", "");
-						boolean directed = Boolean.valueOf(st.nextToken().replace("Directed:", "")) ;
-						String from = st.nextToken().replace("From:", "");
-						String to = st.nextToken().replace("To:", "");
-						String distance = st.nextToken();
-	
-						CalculatePath2 calculatePath2 = new CalculatePath2(placeList, directed, from, to, distance);
-						if (calculatePath2.getCost() != Double.MAX_VALUE) {
-							sendString("success");
-							
-							sendString(calculatePath2.getPlacelist());
-							sendString(calculatePath2.getStartPlace());
-							sendString(calculatePath2.getEndPlace());
-							sendString(calculatePath2.getShortestPath());
-							sendString(String.valueOf((int) calculatePath2.getCost()));
-							sendString(calculatePath2.getPathGraph());
-							sendString(calculatePath2.getShortestPathGraph());
-						} else {
-							sendString("failed");
-							sendString("Can not find shortest path");
+						String data = receive();
+
+						ValidatePathString validate = new ValidatePathString(data);
+						if (!validate.getError().equals("noerror")) {
+							send("error");
+							send(validate.getError());
+						} 
+						else {
+							CalculatePath calculate = new CalculatePath(validate.getPlaceList(),
+									validate.getFrom(), validate.getTo(), validate.getDistance());
+							if (calculate.getCost() != Double.MAX_VALUE) {
+								send("success");
+								send(calculate.getPlacelist());
+								send(calculate.getStartPlace());
+								send(calculate.getEndPlace());
+								send(calculate.getShortestPath());
+								send(String.valueOf((int) calculate.getCost()));
+								send(calculate.getPathGraph());
+								send(calculate.getShortestPathGraph());
+							} else {
+								send("failed");
+								send("Can not find shortest path");
+							}
 						}
+
 					}
 					if (request.equals("cpuScheduling")) {
 
 					}
-					//out.flush();
 				}
 
 			}
@@ -111,9 +111,10 @@ public class Worker implements Runnable {
 			in.close();
 			out.close();
 			socket.close();
-		} catch (IOException e) {
+		} catch (IOException | NoSuchAlgorithmException | InvalidKeyException | InvalidKeySpecException
+				| NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException e) {
 			System.out.println("Exception " + e);
-		} 
+		}
 	}
 
 }

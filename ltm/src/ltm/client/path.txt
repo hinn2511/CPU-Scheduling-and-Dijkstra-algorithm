@@ -1,5 +1,4 @@
 Places:Nha Trang,Vũng Tàu,Đà Lạt,TPHCM,Cà Mau,Đà Nẵng,Hà Nội,Nghệ An
-Directed:true
 From:TPHCM
 To:Hà Nội
 TPHCM->Vũng Tàu:52
