@@ -49,22 +49,22 @@ public class MainInterface extends JFrame {
 	public MainInterface() {
 		super("Find shortest path and CPU scheduling");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1371, 817);
+		setBounds(100, 100, 1371, 663);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(10, 102, 1337, 679);
+		layeredPane.setBounds(10, 71, 1337, 550);
 		contentPane.add(layeredPane);
 		
 		
 		findShortestPathPane = new FindShortestPathPanel();
 		cpuShedulingPanel = new CpuShedulingPanel();
 		
-		findShortestPathPane.setBounds(0, 0, 1337, 674);
-		cpuShedulingPanel.setBounds(0, 0, 1337, 674);
+		findShortestPathPane.setBounds(0, 0, 1337, 551);
+		cpuShedulingPanel.setBounds(0, 0, 1337, 551);
 		
 		findShortestPathPane.setOpaque(false);
 		cpuShedulingPanel.setOpaque(false);
@@ -77,25 +77,25 @@ public class MainInterface extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(UIManager.getColor("Button.background"));
-		panel.setBounds(0, 0, 1347, 92);
+		panel.setBounds(0, 0, 1347, 69);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
 		JButton btnFsp = new JButton("FIND SHORTEST PATH\r\n");
 		btnFsp.setIcon(new ImageIcon("src/ltm/assets/magnifier.png"));
-		btnFsp.setBounds(36, 22, 292, 58);
+		btnFsp.setBounds(32, 10, 292, 39);
 		panel.add(btnFsp);
 		btnFsp.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		
 		JButton btnCs = new JButton("CPU SCHEDULING");
-		btnCs.setBounds(338, 22, 292, 58);
+		btnCs.setBounds(341, 10, 292, 39);
 		panel.add(btnCs);
 		btnCs.setIcon(new ImageIcon("src/ltm/assets/cpu.png"));
 		btnCs.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JButton btnExit = new JButton("EXIT");
-		btnExit.setBounds(1039, 22, 292, 58);
+		btnExit.setBounds(1034, 10, 292, 39);
 		panel.add(btnExit);
 		btnExit.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		

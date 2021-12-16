@@ -71,7 +71,7 @@ public class FindShortestPathPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnFind.setBounds(26, 164, 477, 68);
+		btnFind.setBounds(26, 142, 477, 39);
 		add(btnFind);
 		btnFind.setEnabled(false);
 
@@ -81,35 +81,35 @@ public class FindShortestPathPanel extends JPanel {
 			}
 		});
 		btnExport.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnExport.setBounds(26, 607, 477, 48);
+		btnExport.setBounds(26, 485, 477, 39);
 		add(btnExport);
 		btnExport.setEnabled(false);
 
 		JLabel lblResult = new JLabel("Result");
 		lblResult.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblResult.setBounds(526, 56, 133, 27);
+		lblResult.setBounds(526, 10, 133, 27);
 		add(lblResult);
 
 		JLabel lblNewLabel_1 = new JLabel("Cost");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(26, 496, 45, 39);
+		lblNewLabel_1.setBounds(26, 382, 45, 39);
 		add(lblNewLabel_1);
 
 		txtCost = new JTextField();
 		txtCost.setBackground(SystemColor.text);
 		txtCost.setEditable(false);
 		txtCost.setColumns(10);
-		txtCost.setBounds(26, 530, 477, 39);
+		txtCost.setBounds(26, 415, 477, 39);
 		add(txtCost);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Path\r\n");
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1.setBounds(26, 354, 118, 39);
+		lblNewLabel_1_1.setBounds(26, 275, 118, 39);
 		add(lblNewLabel_1_1);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setViewportBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		scrollPane.setBounds(526, 93, 796, 562);
+		scrollPane.setBounds(526, 43, 796, 481);
 		add(scrollPane);
 
 		JPanel panel = new JPanel();
@@ -124,30 +124,30 @@ public class FindShortestPathPanel extends JPanel {
 		txtEnd.setBackground(SystemColor.text);
 		txtEnd.setEditable(false);
 		txtEnd.setColumns(10);
-		txtEnd.setBounds(273, 290, 230, 39);
+		txtEnd.setBounds(273, 226, 230, 39);
 		add(txtEnd);
 
 		txtStart = new JTextField();
 		txtStart.setBackground(SystemColor.text);
 		txtStart.setEditable(false);
 		txtStart.setColumns(10);
-		txtStart.setBounds(26, 290, 224, 39);
+		txtStart.setBounds(26, 226, 224, 39);
 		add(txtStart);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("End\r\n");
 		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1_1.setBounds(273, 255, 73, 39);
+		lblNewLabel_1_1_1.setBounds(273, 191, 73, 39);
 		add(lblNewLabel_1_1_1);
 
 		JLabel lblNewLabel_1_1_2 = new JLabel("Start");
 		lblNewLabel_1_1_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1_1_2.setBounds(26, 255, 73, 39);
+		lblNewLabel_1_1_2.setBounds(26, 191, 73, 39);
 		add(lblNewLabel_1_1_2);
 		
 		JTextArea txtPath = new JTextArea();
 		txtPath.setBackground(SystemColor.text);
 		txtPath.setEditable(false);
-		txtPath.setBounds(26, 390, 477, 96);
+		txtPath.setBounds(26, 324, 477, 48);
 		txtPath.setBorder(BorderFactory.createCompoundBorder(
 				txtPath.getBorder(), 
 		        BorderFactory.createEmptyBorder(5, 5, 5, 5)));

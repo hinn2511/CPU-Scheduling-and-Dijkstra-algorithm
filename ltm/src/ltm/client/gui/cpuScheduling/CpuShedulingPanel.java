@@ -169,8 +169,8 @@ public class CpuShedulingPanel extends JPanel {
                                 cusJScroll.setForeground(Color.WHITE);
                                 cusJScroll.setBackground(Color.WHITE);
                                 cus.setFont(new Font("Tahoma", Font.PLAIN, 14));
-                                cusJScroll.revalidate();
-                                cusJScroll.repaint();
+                                revalidate();
+                                repaint();
                                 cusJScroll.setVisible(true);
                                 add(cusJScroll);
 
