@@ -49,14 +49,14 @@ public class MainInterface extends JFrame {
 	public MainInterface() {
 		super("Find shortest path and CPU scheduling");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1371, 663);
+		setBounds(100, 100, 1371, 649);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLayeredPane layeredPane = new JLayeredPane();
-		layeredPane.setBounds(10, 71, 1337, 550);
+		layeredPane.setBounds(10, 71, 1337, 549);
 		contentPane.add(layeredPane);
 		
 		
@@ -64,7 +64,7 @@ public class MainInterface extends JFrame {
 		cpuShedulingPanel = new CpuShedulingPanel();
 		
 		findShortestPathPane.setBounds(0, 0, 1337, 551);
-		cpuShedulingPanel.setBounds(0, 0, 1337, 551);
+		cpuShedulingPanel.setBounds(0, 0, 1337, 711);
 		
 		findShortestPathPane.setOpaque(false);
 		cpuShedulingPanel.setOpaque(false);

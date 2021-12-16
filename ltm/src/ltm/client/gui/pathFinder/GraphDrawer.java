@@ -107,6 +107,7 @@ public class GraphDrawer extends JPanel {
 
 		mxGraphComponent mxGraphComponent = new mxGraphComponent(mxGraph);
 		mxGraphComponent.setBorder(BorderFactory.createEmptyBorder());
+		mxGraphComponent.setEnabled(false);
 		this.setBorder(new EmptyBorder(20, 20, 10, 10));
 
 		JPanel panel = new JPanel();
