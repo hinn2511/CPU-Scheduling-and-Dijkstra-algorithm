@@ -27,29 +27,30 @@ public class Graphics extends Canvas {
         String trong_So[]=new String[(cd/2)];
 
         int dem=0;
-        for(int i=0;i<trong_So.length;i++)                     // Trừ hai thằng cuối
+        for(int i=0;i<trong_So.length;i++)
         {
             String temp=st.nextToken();
             trong_So[dem]=temp;
+
             st.nextToken();
             dem++;
         }
         dem=0;
         st = new StringTokenizer(a, "-");
-        for(int i=1;i<arr_Process.length;i++)                     // Trừ hai thằng cuối
+        for(int i=0;i<arr_Process.length;i++)
         {
             st.nextToken();
             String temp=st.nextToken();
-            System.out.println("temp "+temp);
+
             arr_Process[dem]=temp;
 
             dem++;
         }
-        System.out.println("st count "+arr_Process[0]+" trọng số "+trong_So[0]);
+
 
         for(int i=0;i<(cd/2);i++) {
             g.drawLine(50+(i*50),60,50+(i*50),25);
-//            g.drawString(trong_So[i],45+(i*50),50);
+            g.drawString(trong_So[i],40+(i*50),80);
         }
         for (int i=0;i<(cd/2)-1;i++){
             g.drawString(arr_Process[i],70+(i*50),50);

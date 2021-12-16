@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-	public static int port = 1234;
+	public static int port = 1235;
 	public static int numThread = 5;
 	private static ServerSocket server = null;
 	

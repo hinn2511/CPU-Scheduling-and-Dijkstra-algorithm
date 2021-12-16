@@ -118,23 +118,51 @@ public class Worker implements Runnable {
 
 
 						StringTokenizer st=new StringTokenizer(result_Client,",");
-						int dem=0;
-						int dongdung=0;
+						String t=st.nextToken();
+
+
+						int dongdung = 0;
 						int st_Count = st.countTokens();
-						while (st.hasMoreTokens()) {
-							String temp = st.nextToken();
-							StringTokenizer st_temp = new StringTokenizer(temp, "-");
-							st_temp.nextToken();
-							dem = 0;
-							while (st_temp.hasMoreTokens()) {
-								String temp1 = st_temp.nextToken();
-								if (CheckNum(temp1))
-									dem++;
+						if(!CheckNum(t)) {
+
+							int dem = 0;
+
+							while (st.hasMoreTokens()) {
+								String temp = st.nextToken();
+								StringTokenizer st_temp = new StringTokenizer(temp, "-");
+								st_temp.nextToken();
+								dem = 0;
+								while (st_temp.hasMoreTokens()) {
+									String temp1 = st_temp.nextToken();
+									if (CheckNum(temp1))
+										dem++;
+								}
+								if (dem != 2)
+									break;
+								dongdung++;
 							}
-							if (dem != 2)
-								break;
+						}
+						else
+						{
+							int dem = 0;
+							st.nextToken();
+							while (st.hasMoreTokens()) {
+								String temp = st.nextToken();
+								StringTokenizer st_temp = new StringTokenizer(temp, "-");
+								st_temp.nextToken();
+								dem = 0;
+								while (st_temp.hasMoreTokens()) {
+									String temp1 = st_temp.nextToken();
+									if (CheckNum(temp1))
+										dem++;
+								}
+								if (dem != 2)
+									break;
+								dongdung++;
+							}
 							dongdung++;
 						}
+
 
 						if(dongdung==st_Count) {
 							send("Success");
@@ -143,7 +171,7 @@ public class Worker implements Runnable {
 									scheduler = new FirstComeFirstServe();
 									StringTokenizer st1=new StringTokenizer(result_Client,",");
 									String temp="";
-
+									System.out.println(result_Client);
 									while (st1.hasMoreTokens()){
 										temp=st1.nextToken();
 										System.out.println("hello "+temp);
@@ -157,18 +185,53 @@ public class Worker implements Runnable {
 									break;
 								case "SJF":
 									scheduler = new ShortestJobFirst();
+
+									StringTokenizer st2=new StringTokenizer(result_Client,",");
+									String temp2="";
+
+									while (st2.hasMoreTokens()){
+										temp=st2.nextToken();
+										System.out.println("hello "+temp);
+										StringTokenizer token=new StringTokenizer(temp,"-");
+										scheduler.add(new Row(	token.nextToken(),							// P1
+												Integer.parseInt( token.nextToken()), 		// AT(P1)
+												Integer.parseInt( token.nextToken())));		// BT(B1)
+									}
+									scheduler.process();
+									send(display(scheduler));
 									break;
-								case "PSN":
+								case "SRT":
 									scheduler = new PriorityNonPreemptive();
+									st2=new StringTokenizer(result_Client,",");
+									temp2="";
+
+									while (st2.hasMoreTokens()){
+										temp=st2.nextToken();
+										System.out.println("hello "+temp);
+										StringTokenizer token=new StringTokenizer(temp,"-");
+										scheduler.add(new Row(	token.nextToken(),							// P1
+												Integer.parseInt( token.nextToken()), 		// AT(P1)
+												Integer.parseInt( token.nextToken())));		// BT(B1)
+									}
+									scheduler.process();
+									send(display(scheduler));
 									break;
 								case "RR":
-									String tq = JOptionPane.showInputDialog("Time Quantum");
-									if (tq == null) {
-										return;
-									}
+
 									scheduler = new RoundRobin();
+									st2=new StringTokenizer(result_Client,",");
+									temp2="";
+									String tq=st2.nextToken();
+									while (st2.hasMoreTokens()){
+										temp=st2.nextToken();
+										System.out.println("hello "+temp);
+										StringTokenizer token=new StringTokenizer(temp,"-");
+										scheduler.add(new Row(	token.nextToken(),							// P1
+												Integer.parseInt( token.nextToken()), 		// AT(P1)
+												Integer.parseInt( token.nextToken())));		// BT(B1)
+									}
 									scheduler.process();
-									display(scheduler);
+									send(display(scheduler));
 									scheduler.setTimeQuantum(Integer.parseInt(tq));
 									break;
 								default:
@@ -211,14 +274,23 @@ public class Worker implements Runnable {
 		String result="";
 		System.out.println("Process\tAT\tBT\tWT\tTAT");
 
+		String WT_ATT="";
 		//Xuất mảng
+		int t=0;
 		for (Row row : object.getRows())
 		{
+			if(t==0)
+				WT_ATT=row.getProcessName()+ "-" +row.getArrivalTime()+ "-" +
+					row.getBurstTime()+ "-" + row.getWaitingTime()+ "-" + row.getTurnaroundTime();
+			else
+				WT_ATT=WT_ATT+"-"+row.getProcessName()+ "-" +row.getArrivalTime()+ "-" +
+						row.getBurstTime()+ "-" + row.getWaitingTime()+ "-" + row.getTurnaroundTime();
+			t++;
 			System.out.println(row.getProcessName() + "\t" + row.getArrivalTime() + "\t" + row.getBurstTime()
 					+ "\t" + row.getWaitingTime() + "\t" + row.getTurnaroundTime());
 		}
 
-		System.out.println();
+		System.out.println(WT_ATT);
 
 		for (int i = 0; i < object.getTimeline().size(); i++)
 		{
@@ -239,7 +311,8 @@ public class Worker implements Runnable {
 			}
 		}
 		result=result+"-"+object.getAverageWaitingTime()+"-"+object.getAverageTurnAroundTime();
-		System.out.println("say hello "+ result);
+		result=WT_ATT+","+result;
+		System.out.println(" say hello "+ result);
 		System.out.println("\n\nAverage WT: " + object.getAverageWaitingTime() + "\nAverage TAT: " + object.getAverageTurnAroundTime());
 
 		return result;
